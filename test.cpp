@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 #include <vector>
 
-// #1 Сортировка слиянием 
+//#1 Сортировка слиянием
 void merge(std::vector<int>& arr, int left, int mid, int right) {
     int n1 = mid - left + 1;
     int n2 = right - mid;
@@ -35,7 +35,7 @@ void runMergeSort() {
     std::cout << std::endl;
 }
 
-// #2 Быстрая сортировка 
+//#2 Быстрая сортировка
 void swapVals(int& a, int& b) { int temp = a; a = b; b = temp; }
 
 int partition(std::vector<int>& arr, int low, int high) {
@@ -64,11 +64,35 @@ void runQuickSort() {
     std::cout << std::endl;
 }
 
-//Единственный main() 
+//#3 Бинарный поиск 
+int binarySearch(const std::vector<int>& arr, int target) {
+    int left = 0, right = arr.size() - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (arr[mid] == target) return mid;
+        if (arr[mid] < target) left = mid + 1;
+        else right = mid - 1;
+    }
+    return -1;
+}
+
+void runBinarySearch() {
+    std::vector<int> sortedData = { 3, 9, 10, 27, 38, 43, 82 };
+    int target = 27;
+    int result = binarySearch(sortedData, target);
+    if (result != -1)
+        std::cout << "Element " << target << " found at index: " << result << std::endl;
+    else
+        std::cout << "Element " << target << " not found." << std::endl;
+}
+
+//Единственный main()
 int main() {
     std::cout << "1. Merge Sort" << std::endl;
     runMergeSort();
-    std::cout << "\n2. Quick Sort " << std::endl;
+    std::cout << "\n2. Quick Sort" << std::endl;
     runQuickSort();
+    std::cout << "\n3. Binary Search" << std::endl;
+    runBinarySearch();
     return 0;
 }
