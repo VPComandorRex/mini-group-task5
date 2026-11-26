@@ -1,74 +1,56 @@
-﻿#include <iostream>
+﻿ 
+
+#include <iostream>
 #include <vector>
+#include <algorithm>
+#include <functional>
+#include <unordered_map>
 
-// #1 Сортировка слиянием 
-void merge(std::vector<int>& arr, int left, int mid, int right) {
-    int n1 = mid - left + 1;
-    int n2 = right - mid;
-    std::vector<int> L(n1), R(n2);
-    for (int i = 0; i < n1; i++) L[i] = arr[left + i];
-    for (int j = 0; j < n2; j++) R[j] = arr[mid + 1 + j];
-    int i = 0, j = 0, k = left;
-    while (i < n1 && j < n2) {
-        if (L[i] <= R[j]) { arr[k] = L[i]; i++; }
-        else { arr[k] = R[j]; j++; }
-        k++;
+ 
+
+ 
+ 
+
+
+void runSortTask() {
+    std::vector <int> numbers = { 20, 21, 1, 5, 19, 3, 9, 32, 1 };// сам список
+
+    if (numbers.size() < 2) {
+        std::cout << ">2" << std::endl;// проверка на требования к колличеству в массиве
+        return;
     }
-    while (i < n1) { arr[k] = L[i]; i++; k++; }
-    while (j < n2) { arr[k] = R[j]; j++; k++; }
-}
+    std::sort(numbers.begin(), numbers.end(), std::greater<int>());//сортировка от большего к меньшему
 
-void mergeSort(std::vector<int>& arr, int left, int right) {
-    if (left < right) {
-        int mid = left + (right - left) / 2;
-        mergeSort(arr, left, mid);
-        mergeSort(arr, mid + 1, right);
-        merge(arr, left, mid, right);
-    }
-}
-
-void runMergeSort() {
-    std::vector<int> data = { 38, 27, 43, 3, 9, 82, 10 };
-    mergeSort(data, 0, data.size() - 1);
-    std::cout << "Merge Sort: ";
-    for (int x : data) std::cout << x << " ";
+    std::cout << "sorted: ";
+    for (int x : numbers) std::cout << x << " ";
     std::cout << std::endl;
 }
 
-// #2 Быстрая сортировка 
-void swapVals(int& a, int& b) { int temp = a; a = b; b = temp; }
+ 
+int findMostFrequent(const std::vector<int>& arr) {
+    std::unordered_map<int, int> frequency;
 
-int partition(std::vector<int>& arr, int low, int high) {
-    int pivot = arr[high];
-    int i = (low - 1);
-    for (int j = low; j <= high - 1; j++) {
-        if (arr[j] < pivot) { i++; swapVals(arr[i], arr[j]); }
+    for (int num : arr) {
+        frequency[num]++;
     }
-    swapVals(arr[i + 1], arr[high]);
-    return (i + 1);
-}
 
-void quickSort(std::vector<int>& arr, int low, int high) {
-    if (low < high) {
-        int pi = partition(arr, low, high);
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
+    int mostFrequentElement = arr[0];
+    int maxCount = 0;
+
+    for (const auto& pair : frequency) {
+        if (pair.second > maxCount) {
+            maxCount = pair.second;
+            mostFrequentElement = pair.first;
+        }
     }
-}
 
-void runQuickSort() {
-    std::vector<int> data = { 38, 27, 43, 3, 9, 82, 10 };
-    quickSort(data, 0, data.size() - 1);
-    std::cout << "Quick Sort: ";
-    for (int x : data) std::cout << x << " ";
-    std::cout << std::endl;
+    return mostFrequentElement;
 }
-
-//Единственный main() 
+ 
 int main() {
-    std::cout << "1. Merge Sort" << std::endl;
-    runMergeSort();
-    std::cout << "\n2. Quick Sort " << std::endl;
-    runQuickSort();
+    std::cout << "№1 sort" << std::endl;
+    runSortTask();
+
+    // Пока без второй задачи
     return 0;
 }
