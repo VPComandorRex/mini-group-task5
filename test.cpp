@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <vector>
+#include <stdexcept>
 
 //#1 Сортировка слиянием
 void merge(std::vector<int>& arr, int left, int mid, int right) {
@@ -64,7 +65,7 @@ void runQuickSort() {
     std::cout << std::endl;
 }
 
-//#3 Бинарный поиск 
+//#3 Бинарный поиск
 int binarySearch(const std::vector<int>& arr, int target) {
     int left = 0, right = arr.size() - 1;
     while (left <= right) {
@@ -86,13 +87,65 @@ void runBinarySearch() {
         std::cout << "Element " << target << " not found." << std::endl;
 }
 
+//#4 Матрицы
+using Matrix = std::vector<std::vector<int>>;
+
+void printMatrix(const Matrix& mat) {
+    for (const auto& row : mat) {
+        for (int val : row) std::cout << val << "\t";
+        std::cout << std::endl;
+    }
+}
+
+Matrix addMatrices(const Matrix& A, const Matrix& B) {
+    int rows = A.size(), cols = A[0].size();
+    Matrix C(rows, std::vector<int>(cols));
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < cols; j++)
+            C[i][j] = A[i][j] + B[i][j];
+    return C;
+}
+
+Matrix subtractMatrices(const Matrix& A, const Matrix& B) {
+    int rows = A.size(), cols = A[0].size();
+    Matrix C(rows, std::vector<int>(cols));
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < cols; j++)
+            C[i][j] = A[i][j] - B[i][j];
+    return C;
+}
+
+Matrix multiplyMatrices(const Matrix& A, const Matrix& B) {
+    int rowsA = A.size(), colsA = A[0].size();
+    int rowsB = B.size(), colsB = B[0].size();
+    if (colsA != rowsB) throw std::invalid_argument("Incompatible matrix sizes!");
+    Matrix C(rowsA, std::vector<int>(colsB, 0));
+    for (int i = 0; i < rowsA; i++)
+        for (int j = 0; j < colsB; j++)
+            for (int k = 0; k < colsA; k++)
+                C[i][j] += A[i][k] * B[k][j];
+    return C;
+}
+
+void runMatrixDemo() {
+    Matrix A = { {1, 2}, {3, 4} };
+    Matrix B = { {5, 6}, {7, 8} };
+    std::cout << "Matrix A:" << std::endl; printMatrix(A);
+    std::cout << "Matrix B:" << std::endl; printMatrix(B);
+    std::cout << "\nA + B:" << std::endl; printMatrix(addMatrices(A, B));
+    std::cout << "\nA - B:" << std::endl; printMatrix(subtractMatrices(A, B));
+    std::cout << "\nA * B:" << std::endl; printMatrix(multiplyMatrices(A, B));
+}
+
 //Единственный main()
 int main() {
-    std::cout << "1. Merge Sort" << std::endl;
+    std::cout << "=== 1. Merge Sort ===" << std::endl;
     runMergeSort();
-    std::cout << "\n2. Quick Sort" << std::endl;
+    std::cout << "\n=== 2. Quick Sort ===" << std::endl;
     runQuickSort();
-    std::cout << "\n3. Binary Search" << std::endl;
+    std::cout << "\n=== 3. Binary Search ===" << std::endl;
     runBinarySearch();
+    std::cout << "\n=== 4. Matrix Operations ===" << std::endl;
+    runMatrixDemo();
     return 0;
 }
